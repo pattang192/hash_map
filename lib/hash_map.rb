@@ -26,7 +26,7 @@ class HashMap
     if @buckets[index].contains?(key)
       @buckets[index].update(key, value)
     else
-      @buckets[index].append([key, value])
+      @buckets[index].append(key, value)
     end
     grow?
   end

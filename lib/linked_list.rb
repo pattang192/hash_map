@@ -4,18 +4,18 @@
 class LinkedList
   attr_accessor :head
 
-  def append(value)
+  def append(key, value)
     if @head.nil?
-      prepend(value)
+      prepend(key, value)
     else
       current = @head
       current = current.next_node until current.next_node.nil?
-      current.next_node = Node.new(value)
+      current.next_node = Node.new(key, value)
     end
   end
 
-  def prepend(value)
-    @head = @head.nil? ? Node.new(value) : Node.new(value, @head)
+  def prepend(key, value)
+    @head = @head.nil? ? Node.new(key, value) : Node.new(key, value, @head)
   end
 
   def size
@@ -30,20 +30,20 @@ class LinkedList
     size
   end
 
-  def contains?(value)
+  def contains?(key)
     return false if @head.nil?
 
     current = @head
-    current = current.next_node while current.value[0] != value && !current.next_node.nil?
-    return true if current.value[0] == value
+    current = current.next_node while current.key != key && !current.next_node.nil?
+    return true if current.key == key
 
     false
   end
 
-  def retrieve(value)
+  def retrieve(key)
     current = @head
-    current = current.next_node while current.value[0] != value && !current.next_node.nil?
-    return puts current.value[1] if current.value[0] == value
+    current = current.next_node while current.key != key && !current.next_node.nil?
+    return puts current.value if current.key == key
 
     false
   end
@@ -52,7 +52,7 @@ class LinkedList
     keys = []
     current = @head
     until current.nil?
-      keys << current.value[0]
+      keys << current.key
       current = current.next_node
     end
     keys
@@ -62,7 +62,7 @@ class LinkedList
     values = []
     current = @head
     until current.nil?
-      values << current.value[1]
+      values << current.value
       current = current.next_node
     end
     values
@@ -72,7 +72,7 @@ class LinkedList
     entries = []
     current = @head
     until current.nil?
-      entries << [current.value[0], current.value[1]]
+      entries << [current.key, current.value]
       current = current.next_node
     end
     entries
@@ -80,19 +80,19 @@ class LinkedList
 
   def update(key, value)
     current = @head
-    current = current.next_node while current.value[0] != key && !current.next_node.nil?
-    current.value[1] = value if current.value[0] == key
+    current = current.next_node while current.key != key && !current.next_node.nil?
+    current.value = value if current.key == key
   end
 
-  def find(value)
+  def find(key)
     current = @head
     index = 0
-    while current.value[0] != value && !current.next_node.nil?
+    while current.key != key && !current.next_node.nil?
 
       current = current.next_node
       index += 1
     end
-    return index if current.value[0] == value
+    return index if current.key == key
 
     nil
   end
@@ -101,7 +101,7 @@ class LinkedList
     current = @head
     list = ""
     until current.nil?
-      list << "(#{current.value}) -> "
+      list << "(#{current.key}, #{current.value}) -> "
       current = current.next_node
     end
     list << "nil"
@@ -109,24 +109,25 @@ class LinkedList
 
   def remove_at(index)
     if index.zero?
-      puts @head.value[1]
+      puts @head.value
       @head = @head.next_node
     else
       prev_node = @head
       (index - 1).times { prev_node = prev_node.next_node }
-      puts prev_node.next_node.value[1]
+      puts prev_node.next_node.value
       next_node = prev_node.next_node.next_node
       prev_node.next_node = next_node
     end
   end
-end
 
-# linked list node creation
-class Node
-  attr_accessor :value, :next_node
+  # linked list node creation
+  class Node
+    attr_accessor :key, :value, :next_node
 
-  def initialize(value = nil, next_node = nil)
-    @value = value
-    @next_node = next_node
+    def initialize(key = nil, value = nil, next_node = nil)
+      @key = key
+      @value = value
+      @next_node = next_node
+    end
   end
 end
