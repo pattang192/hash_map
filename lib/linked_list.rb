@@ -4,11 +4,12 @@
 class LinkedList
   attr_accessor :head
 
-  def append(key, value)
+  def append(key, value, current = @head)
     if @head.nil?
       prepend(key, value)
+    elsif contains?(key)
+      update(key, value)
     else
-      current = @head
       current = current.next_node until current.next_node.nil?
       current.next_node = Node.new(key, value)
     end
@@ -40,17 +41,15 @@ class LinkedList
     false
   end
 
-  def retrieve(key)
-    current = @head
+  def retrieve(key, current = @head)
     current = current.next_node while current.key != key && !current.next_node.nil?
     return puts current.value if current.key == key
 
     false
   end
 
-  def all_keys
+  def all_keys(current = @head)
     keys = []
-    current = @head
     until current.nil?
       keys << current.key
       current = current.next_node
@@ -58,9 +57,8 @@ class LinkedList
     keys
   end
 
-  def all_values
+  def all_values(current = @head)
     values = []
-    current = @head
     until current.nil?
       values << current.value
       current = current.next_node
@@ -68,9 +66,8 @@ class LinkedList
     values
   end
 
-  def all_entries
+  def all_entries(current = @head)
     entries = []
-    current = @head
     until current.nil?
       entries << [current.key, current.value]
       current = current.next_node
@@ -78,17 +75,14 @@ class LinkedList
     entries
   end
 
-  def update(key, value)
-    current = @head
+  def update(key, value, current = @head)
     current = current.next_node while current.key != key && !current.next_node.nil?
     current.value = value if current.key == key
   end
 
-  def find(key)
-    current = @head
+  def find(key, current = @head)
     index = 0
     while current.key != key && !current.next_node.nil?
-
       current = current.next_node
       index += 1
     end
@@ -97,8 +91,7 @@ class LinkedList
     nil
   end
 
-  def to_s
-    current = @head
+  def to_s(current = @head)
     list = ""
     until current.nil?
       list << "(#{current.key}, #{current.value}) -> "

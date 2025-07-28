@@ -23,12 +23,8 @@ class HashMap
     raise IndexError if index.negative? || index >= @buckets.length
 
     @buckets[index] = LinkedList.new if @buckets[index].nil?
-    if @buckets[index].contains?(key)
-      @buckets[index].update(key, value)
-    else
-      @buckets[index].append(key, value)
-    end
-    grow?
+    @buckets[index].append(key, value)
+    grow if grow?
   end
 
   def get(key)
@@ -81,7 +77,7 @@ class HashMap
 
   def grow?
     capacity = @buckets.length
-    grow if length > capacity * @load_factor
+    length > capacity * @load_factor
   end
 
   def grow
